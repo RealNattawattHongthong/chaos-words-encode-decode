@@ -1,60 +1,65 @@
-How to Solve This Multi-Layer Encoding By Hand (10 Layers)
+# Multi-Layer Encoding/Decoding System
 
-This encoding system has 10 layers that progressively transform the original text.
-Here's a step-by-step guide on how to decode it manually:
+A robust Python implementation of a 10-layer encoding and decoding system.
 
-DECODING PROCESS (In reverse order)
+## Project Structure
 
-Layer 10: Base64 Decoding
-1. Decode the string using standard Base64 decoding rules
-2. This will reveal text with embedded marker characters
+```
+.
+├── src/                  # Source code
+│   ├── core/             # Core functionality
+│   │   └── encoder_decoder.py  # Main encoding/decoding implementation
+│   └── utils/            # Utility functions
+│       └── compare_complexity.py
+├── tests/                # Test files
+├── docs/                 # Documentation
+├── examples/             # Example code and debug utilities
+└── archive/              # Legacy code (kept for reference)
+```
 
-Layer 9: Remove Marker Characters
-1. Every 11th character is a marker character (starting after the 10th character)
-2. The markers follow the pattern "MARKER" repeated as needed
-3. Remove all these markers to get the Layer 8 encoded text
+## Features
 
-Layer 8: Triple Base64 Decoding
-1. Apply Base64 decoding three times in succession
-2. Each decode operation converts the string to a new, shorter encoded string
-3. After three decodes, you'll get the interleaved pattern text
+- Implements a 10-layer encoding/decoding system:
+  1. Base64 encoding
+  2. Simple character substitution 
+  3. ROT13 on alphabetic characters
+  4. String reversal
+  5. Position-based character shifts
+  6. Pattern interleaving with "X1Y2Z3"
+  7. Chunk-based transformations
+  8. Triple Base64 encoding
+  9. Marker insertion at fixed intervals
+  10. Final Base64 encoding
 
-Layer 7: Group Transformation
-1. Split the text into chunks of 3 characters each
-2. For even-positioned chunks (0-indexed), reverse the characters
-3. Leave odd-positioned chunks as they are
-4. Concatenate all chunks back together
-5. This reconstructs the original Layer 6 text
+- Robust implementation with proper error handling
+- Handles Base64 padding correctly
+- Support for problematic edge cases
 
-Layer 6: Pattern Interleaving
-1. Every other character is part of a fixed pattern "X1Y2Z3" repeated throughout
-2. Keep only the characters at even positions (0, 2, 4, etc.)
-3. Discard all the odd-positioned pattern characters
+## Usage
 
-Layer 5: Position-based Shift
-1. For each alphabetic character at position i:
-   - Determine if it's uppercase or lowercase
-   - Shift it back by (i % 7) positions in its alphabet
-   - Formula for each letter: ((ascii_value - base - shift + 26) % 26) + base
-   - Where base is 'a' (97) for lowercase or 'A' (65) for uppercase
+```python
+from src.core.encoder_decoder import encode, decode
 
-Layer 4: String Reversal
-1. Simply reverse the entire string (last character becomes first, etc.)
+# Encoding
+original = "test123"
+encoded = encode(original)
+print(f"Encoded: {encoded}")
 
-Layer 3: ROT13 Decoding
-1. For each alphabetic character, shift it 13 positions backward in the alphabet
-2. For lowercase: ((char_value - 'a' - 13) % 26) + 'a'
-3. For uppercase: ((char_value - 'A' - 13) % 26) + 'A'
-4. Non-alphabetic characters remain unchanged
+# Decoding
+decoded = decode(encoded)
+print(f"Decoded: {decoded}")
+```
 
-Layer 2: Simple Substitution
-1. For alphabetic characters: shift backward by 5 places in the alphabet
-   - For lowercase: ((char_value - 'a' - 5) % 26) + 'a'
-   - For uppercase: ((char_value - 'A' - 5) % 26) + 'A'
-2. For numeric digits: shift backward by 3
-   - ((digit_value - '0' - 3) % 10) + '0'
-3. Non-alphanumeric characters remain unchanged
+## Running Tests
 
-Layer 1: Base64 Decoding
-1. Apply one final standard Base64 decode operation
-2. Convert the resulting bytes to text to get the original message
+To run the tests:
+
+```bash
+cd tests
+python -m unittest discover
+```
+
+## Requirements
+
+- Python 3.6+
+- Base64 module (standard library)

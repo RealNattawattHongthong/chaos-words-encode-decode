@@ -1,0 +1,1 @@
+# Core encoding and decoding functionality
