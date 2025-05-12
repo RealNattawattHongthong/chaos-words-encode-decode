@@ -1,66 +1,60 @@
-# Multi-Layer Text Encoder/Decoder
+How to Solve This Multi-Layer Encoding By Hand (10 Layers)
 
-This project implements a multi-step encoding and decoding system designed to transform text through several layers of encoding, making it difficult to reverse-engineer without knowing the exact procedure.
+This encoding system has 10 layers that progressively transform the original text.
+Here's a step-by-step guide on how to decode it manually:
 
-## How It Works
+DECODING PROCESS (In reverse order)
 
-The encoding process transforms plain text through multiple sequential encoding methods:
+Layer 10: Base64 Decoding
+1. Decode the string using standard Base64 decoding rules
+2. This will reveal text with embedded marker characters
 
-1. **Original Text → Base64**
-2. **Base64 → Hex**
-3. **Hex → Base64**
-4. **Base64 → ROT13**
-5. **ROT13 → Reverse Groups of 5**
+Layer 9: Remove Marker Characters
+1. Every 11th character is a marker character (starting after the 10th character)
+2. The markers follow the pattern "MARKER" repeated as needed
+3. Remove all these markers to get the Layer 8 encoded text
 
-The decoding process reverses these steps in the exact opposite order to recover the original text.
+Layer 8: Triple Base64 Decoding
+1. Apply Base64 decoding three times in succession
+2. Each decode operation converts the string to a new, shorter encoded string
+3. After three decodes, you'll get the interleaved pattern text
 
-## Files in the Project
+Layer 7: Group Transformation
+1. Split the text into chunks of 3 characters each
+2. For even-positioned chunks (0-indexed), reverse the characters
+3. Leave odd-positioned chunks as they are
+4. Concatenate all chunks back together
+5. This reconstructs the original Layer 6 text
 
-- `encode_decode.py` - Contains the main encoding and decoding functions
-- `test_decode.py` - A testing script that demonstrates decoding step-by-step
-- `howtosolvebyhand.txt` - Instructions for manually decoding the text
-- `wordie.txt` - Sample encoded text
+Layer 6: Pattern Interleaving
+1. Every other character is part of a fixed pattern "X1Y2Z3" repeated throughout
+2. Keep only the characters at even positions (0, 2, 4, etc.)
+3. Discard all the odd-positioned pattern characters
 
-## Usage
+Layer 5: Position-based Shift
+1. For each alphabetic character at position i:
+   - Determine if it's uppercase or lowercase
+   - Shift it back by (i % 7) positions in its alphabet
+   - Formula for each letter: ((ascii_value - base - shift + 26) % 26) + base
+   - Where base is 'a' (97) for lowercase or 'A' (65) for uppercase
 
-```python
-from encode_decode import encode, decode
+Layer 4: String Reversal
+1. Simply reverse the entire string (last character becomes first, etc.)
 
-# Encoding
-original_text = "Your message here"
-encoded = encode(original_text)
-print(f"Encoded: {encoded}")
+Layer 3: ROT13 Decoding
+1. For each alphabetic character, shift it 13 positions backward in the alphabet
+2. For lowercase: ((char_value - 'a' - 13) % 26) + 'a'
+3. For uppercase: ((char_value - 'A' - 13) % 26) + 'A'
+4. Non-alphabetic characters remain unchanged
 
-# Decoding
-decoded = decode(encoded)
-print(f"Decoded: {decoded}")
-```
+Layer 2: Simple Substitution
+1. For alphabetic characters: shift backward by 5 places in the alphabet
+   - For lowercase: ((char_value - 'a' - 5) % 26) + 'a'
+   - For uppercase: ((char_value - 'A' - 5) % 26) + 'A'
+2. For numeric digits: shift backward by 3
+   - ((digit_value - '0' - 3) % 10) + '0'
+3. Non-alphanumeric characters remain unchanged
 
-## Manual Decoding Process
-
-To decode the text manually (as described in `howtosolvebyhand.txt`):
-
-1. **Undo Reverse Groups of 5**
-   - Split text into 5-character chunks
-   - Reverse each chunk individually
-   - Join them back together
-
-2. **Undo ROT13**
-   - Apply ROT13 decoding (shift letters 13 positions back)
-
-3. **Undo First Base64**
-   - Decode using Base64 to get a hex string
-
-4. **Undo Hex Encoding**
-   - Convert hex to ASCII
-
-5. **Undo Second Base64**
-   - Decode using Base64 to get original text
-
-## Testing
-
-Run the test decoder to see the decoding process step-by-step:
-
-```bash
-python3 test_decode.py
-```
+Layer 1: Base64 Decoding
+1. Apply one final standard Base64 decode operation
+2. Convert the resulting bytes to text to get the original message
