@@ -1,0 +1,104 @@
+How to Solve This Multi-Layer Encoding By Hand (10 Layers)
+
+This encoding system has 10 layers that progressively transform the original text.
+Here's a step-by-step guide on how to decode it manually:
+
+DECODING PROCESS (In reverse order)
+
+Layer 10: Base64 Decoding
+1. Decode the string using standard Base64 decoding rules
+2. This will reveal text with embedded marker characters
+
+Layer 9: Remove Marker Characters
+1. Every 11th character is a marker character (starting after the 10th character)
+2. The markers follow the pattern "MARKER" repeated as needed
+3. Remove all these markers to get the Layer 8 encoded text
+
+Layer 8: Triple Base64 Decoding
+1. Apply Base64 decoding three times in succession
+2. Each decode operation converts the string to a new, shorter encoded string
+3. After three decodes, you'll get the interleaved pattern text
+
+Layer 7: Group Transformation
+1. Split the text into chunks of 3 characters each
+2. For even-positioned chunks (0-indexed), reverse the characters
+3. Leave odd-positioned chunks as they are
+4. Concatenate all chunks back together
+5. This reconstructs the original Layer 6 text
+
+Layer 6: Pattern Interleaving
+1. Every other character is part of a fixed pattern "X1Y2Z3" repeated throughout
+2. Keep only the characters at even positions (0, 2, 4, etc.)
+3. Discard all the odd-positioned pattern characters
+
+Layer 5: Position-based Shift
+1. For each alphabetic character at position i:
+   - Determine if it's uppercase or lowercase
+   - Shift it back by (i % 7) positions in its alphabet
+   - Formula for each letter: ((ascii_value - base - shift + 26) % 26) + base
+   - Where base is 'a' (97) for lowercase or 'A' (65) for uppercase
+
+Layer 4: String Reversal
+1. Simply reverse the entire string (last character becomes first, etc.)
+
+Layer 3: ROT13 Decoding
+1. For each alphabetic character, shift it 13 positions backward in the alphabet
+2. For lowercase: ((char_value - 'a' - 13) % 26) + 'a'
+3. For uppercase: ((char_value - 'A' - 13) % 26) + 'A'
+4. Non-alphabetic characters remain unchanged
+
+Layer 2: Simple Substitution
+1. For alphabetic characters: shift backward by 5 places in the alphabet
+   - For lowercase: ((char_value - 'a' - 5) % 26) + 'a'
+   - For uppercase: ((char_value - 'A' - 5) % 26) + 'A'
+2. For numeric digits: shift backward by 3
+   - ((digit_value - '0' - 3) % 10) + '0'
+3. Non-alphanumeric characters remain unchanged
+
+Layer 1: Base64 Decoding
+1. Apply one final standard Base64 decode operation
+2. Convert the resulting bytes to text to get the original message
+
+TIPS FOR MANUAL DECODING
+
+1. Base64 Decoding:
+   - Use online tools for Base64 decoding steps
+   - Remember the padding rules (string length must be divisible by 4)
+   - Watch for special characters that might require URL-safe decoding
+
+2. Positional Operations:
+   - Keep track of character positions carefully for position-based shifts
+   - Use a pencil to number characters or use a tracking grid
+
+3. Alphabet Shifts:
+   - For ROT13 and other shifts, you can create a lookup table
+   - For ROT13: A→N, B→O, ... M→Z, N→A, ... Z→M (same for lowercase)
+   - For the Layer 2 shift: A→V, B→W, ... Z→U (same pattern for lowercase)
+
+4. Pattern Removal:
+   - When removing markers or interleaved patterns, use different colored markers
+   - Cross out pattern characters instead of erasing them to keep track
+
+5. Systematic Approach:
+   - Work through one layer at a time
+   - Verify your work at each step by checking if the output looks reasonable
+   - Remember that the intermediate steps might not look like meaningful text
+
+EXAMPLE WALKTHROUGH (Abbreviated)
+
+For the encoded string:
+V2tkNGJrOVZNVk1oYVJuQnFZV3R2QWVsWXlNVlpsYlZSSnpZVVZhVGxZeUtVbUZVYkZKS1RrRVprZFZvemNGWlNSYldoNlZGWmFkMU1kc2JIRlRhazVZQVltMTBObFp0ZUdSOVdWVEZWVkd4d0tWbFpGY0V4V01uRWhPWld4a1IyRklSWkU1V01YQmhXbE1aU1MxUnNaSE5hQU0zQnNWbTFvUTFSUldhR0ZYYkZwVktVMVJTV0dKck1URVk9
+
+1. Base64 decode (Layer 10) → Text with markers (Layer 9)
+2. Remove markers → Triple-encoded text (Layer 8)
+3. Triple Base64 decode → Pattern-interleaved text (Layers 7 & 6)
+4. Extract every other character → Position-shifted text (Layer 5)
+5. Undo position shifts → Reversed text (Layer 4)
+6. Reverse the string → ROT13 text (Layer 3)
+7. Undo ROT13 → Substitution text (Layer 2)
+8. Undo substitution → Base64 text (Layer 1)
+9. Final Base64 decode → "insta : nattawatthongthong"
+
+This decoding process requires careful tracking of characters and positions, but
+each step follows a clear, deterministic rule that can be applied manually with
+enough patience and attention to detail.

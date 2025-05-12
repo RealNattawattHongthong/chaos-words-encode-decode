@@ -1,0 +1,9 @@
+Original: insta : nattawatthongthong
+Encoded: V2tkNGJrOVZNVk1oYVJuQnFZV3R2QWVsWXlNVlpsYlZSSnpZVVZhVGxZeUtVbUZVYkZKS1RrRVprZFZvemNGWlNSYldoNlZGWmFkMU1kc2JIRlRhazVZQVltMTBObFp0ZUdSOVdWVEZWVkd4d0tWbFpGY0V4V01uRWhPWld4a1IyRklSWkU1V01YQmhXbE1aU1MxUnNaSE5hQU0zQnNWbTFvUTFSUldhR0ZYYkZwVktVMVJTV0dKck1URVk9
+
+System Flow (10 Layers):
+Original → Layer 1: Base64 → Layer 2: Substitution (+5/+3) → Layer 3: ROT13 → Layer 4: Reverse → Layer 5: Position Shifts → Layer 6: Pattern Interleave → Layer 7: Group Transform → Layer 8: Triple Base64 → Layer 9: Add Markers → Layer 10: Final Base64 → Encoded
+
+Decoding Flow (Reverse Order):
+Encoded → Layer 10: Base64 Decode → Layer 9: Remove Markers → Layer 8: Triple Base64 Decode → Layer 7: Undo Group Transform → Layer 6: Remove Pattern → Layer 5: Undo Position Shifts → Layer 4: Reverse → Layer 3: Undo ROT13 → Layer 2: Undo Substitution → Layer 1: Base64 Decode → Original
+VlVaYWIwMXJNVk1oYVJuQnJaV3R3QU5WWXlNVlpsYkVScFhZVVJLVGxZeUtVbUZVTUZKS1RWRVprZFZvemNHbFNSYldoU1ZGWmFkMU1kdFVqWlRiV3hZQVltMTBObFpyV21SOVdNREZWVkd4d0tWR0ZyY0ZOV01uRWhPWlcxT1IyRkdSYkU1V01YQmhWa01aU1MwNVdaSE5hQU0zQlNWbTFuTVZSUldhR0ZYYXpsRktVMnhhV0dKck1URVk9 slove by hand
